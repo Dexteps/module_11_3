@@ -1,0 +1,29 @@
+import inspect
+from collections import defaultdict
+from pprint import pprint
+import sys
+
+def introspection_info(obj):
+    under_line = defaultdict(list)
+    for attr in dir(obj):
+        get_attr = getattr(obj, attr)
+        if inspect.isbuiltin(get_attr):
+            under_line['builtin_function_or_method'].append(attr)
+        if inspect.isfunction(get_attr):
+            under_line['functions'].append(attr)
+        if inspect.ismethod(get_attr):
+            under_line['methods'].append(attr)
+        if inspect.isclass(get_attr):
+            under_line['class'].append(attr)
+        if inspect.ismodule(get_attr):
+            under_line['modules'].append(attr)
+        if attr.startswith('_'):
+            under_line['privet attributes'].append(attr)
+        if callable(get_attr):
+            under_line['callable'].append(attr)
+    under_line['module'].append(sys.modules[__name__])
+
+    return under_line
+
+number_info = introspection_info(42)
+pprint(number_info)
